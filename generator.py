@@ -111,18 +111,19 @@ def print_on_canvas(canvas,letter_img,position):
     expanded = np.repeat(expanded, 3, axis=2)
     big_canvas[*sl] = (big_canvas[*sl] * (1 - expanded)) + (color[*sl] * expanded)
     canvas = big_canvas[height:2 * height,width:2 * width]
-    return canvas,(max(left,0),min(right,canvas.shape[1] - 1),max(top,0),min(bottom,canvas.shape[0] - 1))
+    left,right,top,bottom = max(left,0),min(right,canvas.shape[1] - 1),max(top,0),min(bottom,canvas.shape[0] - 1)
+    x_center,y_center = ((right + left) / 2) / width,((bottom + top) / 2) / height
+    w,h = (right - left) / width,(bottom - top) / height
+    return canvas,(x_center,y_center,w,h)
 
 def generate_captcha():
     canvas = generate_gradient()
     canvas = add_noise(canvas)
-    name = ''
     marks = []
     for i in range(6):
         letter = random.choice(letters)
         font = random.choice(fontes)
         img_letter = get_letter_image(letter,font)
         canvas,coord = print_on_canvas(canvas,img_letter,i)
-        name += letter
         marks.append([letter,*coord])
     return canvas.astype(int),marks
