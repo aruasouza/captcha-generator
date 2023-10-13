@@ -126,4 +126,6 @@ def generate_captcha():
         img_letter = get_letter_image(letter,font)
         canvas,coord = print_on_canvas(canvas,img_letter,i)
         marks.append([letter,*coord])
+    blur = random.randint(1,4)
+    canvas = cv2.blur(canvas,(blur,blur))
     return canvas.astype(int),marks
